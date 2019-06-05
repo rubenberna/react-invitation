@@ -2,7 +2,7 @@ import React from 'react';
 
 import Navbar from './navbar'
 import Details from './details'
-import Form from './form'
+import FormContainer from './form/FormContainer'
 import Footer from './footer'
 import './App.scss'
 
@@ -11,7 +11,7 @@ const App = () => {
     <>
       <Navbar/>
       <Details/>
-      <Form/>
+      <FormContainer/>
       <Footer/>
     </>
   )
