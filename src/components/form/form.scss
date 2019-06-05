@@ -6,7 +6,7 @@
 
   .form-wrapper {
     width: 76%;
-    height: 205px;
+    height: 235px;
     padding: 40px;
     border: 1px solid #e0e0e0;
     border-radius: 14px;
@@ -15,6 +15,7 @@
     .form-title {
       font-weight: 900;
       font-size: 30px;
+      color: #757575;
     }
 
     .form-personen {
@@ -25,6 +26,7 @@
     .form-footer {
       display: flex;
       justify-content: space-between;
+      padding-top: 10px;
 
       button {
         width: 160px;
