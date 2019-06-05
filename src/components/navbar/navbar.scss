@@ -1,0 +1,31 @@
+
+.navbar-wrapper {
+  background: #275598;
+  display: flex;
+  justify-content: center;
+  height: 23vh;
+  align-items: center;
+  
+  .navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    font-weight: 600;
+
+    .navbar-title {
+      font-size: 55px;
+      color: white;
+    }
+
+    .navbar-subtitle {
+      font-size: 30px;
+      color: white;
+    }
+
+    img {
+      transform: rotate(20deg);
+      width: 150px;
+    }
+  }
+}

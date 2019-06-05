@@ -1,0 +1,23 @@
+.details-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  height: 30vh;
+  align-items: center;
+
+  .details-title {
+    margin-bottom: 40px;
+    color: #275598;
+  }
+
+  .details-item {
+    display: flex;
+    align-items: center;
+    color: #275598;
+  }
+
+  img {
+    width: 70px;
+    margin-right: 15px;
+  }  
+}
