@@ -2,7 +2,6 @@
   height: 30vh;
   display: flex !important;
   align-items: center;
-  margin-top: -10px;
 
   .form-wrapper {
     width: 76%;
@@ -18,9 +17,13 @@
       color: #757575;
     }
 
-    .form-personen {
-      display: flex;
-      align-items: center;
+    .dropdown {
+      width: 10%; 
+    }
+
+    .form-people {
+      margin-top: 3px;
+      padding: 6px;
     }
 
     .form-footer {
