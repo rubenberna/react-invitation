@@ -19,8 +19,18 @@
       color: #757575;
     }
 
-    .dropdown {
-      width: 10%; 
+    .form-email {
+      margin-right: 10px;
+      position: relative;
+
+      .form-email-msg {
+        margin: 0;
+        position: absolute;
+      }
+    }
+    .form-dropdown {
+      min-width: 10px;
+      max-height: 10px; 
     }
 
     .form-people {

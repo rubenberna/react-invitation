@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form, Input, Transition, Dropdown } from 'semantic-ui-react'
+import { Button, Form, Input, Transition, Dropdown, Header } from 'semantic-ui-react'
 
 import './form.scss'
 
@@ -23,9 +23,7 @@ class FormInvite extends Component {
   handleChange = (name, e) => {    
     const change = {}
     let inputValue = e.target.value
-    if (name === 'voornaam' || 'naam') {
-      inputValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
-    }
+    if (name === 'voornaam' || 'naam') inputValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
     change[name] = inputValue
     this.setState({ ...change })
   }
@@ -45,6 +43,8 @@ class FormInvite extends Component {
   validateForm = (tasker) => {
     let change = {}
     let ready = true
+
+    // Check if all fields have an input
     for (const key in tasker) {
       let value = tasker[key]
       if (value === undefined || value === '' || value === 'error') {
@@ -53,10 +53,26 @@ class FormInvite extends Component {
         this.setState({ ...change })
       }
     }
+
+    // Regex email
+    if (tasker.email) {
+      if (this.verifyEmail(tasker.email) === false ) {
+        this.setState({ email: 'error'})
+        ready = false
+      }
+    }
+
+    // Submit form
     if (ready) {
     this.props.onFormSubmit(tasker)
     this.toggleVisibility()
     }
+  }
+
+  verifyEmail = (email) => {
+    const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+    if (email.match(mailformat)) return true;
+    else return false;
   }
 
   clearError = (property) => {
@@ -76,8 +92,11 @@ class FormInvite extends Component {
               <Form.Group>
                 <Form.Field width={6} control={Input} placeholder='Voornaam' error={voornaam === 'error'} onChange={e => this.handleChange('voornaam', e)} onFocus={e => this.clearError('voornaam')} />
                 <Form.Field width={6} control={Input} placeholder='Naam' error={naam === 'error'} onChange={e => this.handleChange('naam', e)} onFocus={e => this.clearError('naam')} />
-                <Form.Field width={8} control={Input} placeholder='Email' error={email === 'error'} onChange={e => this.handleChange('email', e)} onFocus={e => this.clearError('email')} />
-                <Dropdown placeholder='1' error={guests === 'error'} style={{minWidth: '10px'}} selection options={nrGuests} onChange={e => this.setState({guests: e.target.innerText})}/>
+                <div width={8} className="form-email">
+                  <Form.Field control={Input} placeholder='Email' error={email === 'error'} onChange={e => this.handleChange('email', e)} onFocus={e => this.clearError('email')} />
+                  {email === 'error' && <Header as='h6' color='red' className="form-email-msg">Invalid Email format</Header>}
+                </div>
+                <Dropdown placeholder='1' className="form-dropdown" error={guests === 'error'} selection options={nrGuests} onChange={e => this.setState({guests: e.target.innerText})}/>
                 <h3 className="form-people">Person/Personen</h3>
               </Form.Group>
                 <div className="form-footer">
