@@ -5,19 +5,21 @@ import db from '../../database/firebaseInit'
 import Form from './Form'
 
 const {
-  REACT_APP_EMAILJS_TEMPLATEID: template,
+  REACT_APP_EMAILJS_TEMPLATEID: template_id,
   REACT_APP_EMAILJS_USERID: user_id,
-  REACT_APP_EMAILJS_SERVICEID: serviceId,
+  REACT_APP_EMAILJS_SERVICEID: service_id,
 } = process.env
 
 class FormContainer extends Component {
   state = {
-
+    formSubmitted: false
   }
 
   finishInvitation = (tasker) => {
     this.saveInDatabase(tasker)
-    this.sendEmail(tasker)
+    // this.sendEmail(tasker)
+    console.log('saved');
+    this.setState({ formSubmitted: true })
   }
 
   saveInDatabase = (tasker) => {
@@ -27,17 +29,20 @@ class FormContainer extends Component {
   sendEmail = (tasker) => {
     const template_params = {
       name: `${tasker.voornaam} ${tasker.voornaam}`,
-      guests: `${tasker.guests}`, 
+      guests: `${tasker.guests}`,
+      email: `${tasker.email}` 
     };
 
-    emailjs.send(serviceId, template, template_params, user_id)
+    emailjs.send(service_id, template_id, template_params, user_id)
       .then( res => console.log('success', res.status, res.text))
       .catch(e => console.log('error', e))
   }
 
   render() {
-    return(
-      <Form onFormSubmit={ this.finishInvitation } />
+    return (
+      <div>
+        <Form onFormSubmit={this.finishInvitation} />   
+      </div>
     )
   }
 }

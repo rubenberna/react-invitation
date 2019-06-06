@@ -1,50 +1,93 @@
 import React, { Component } from 'react'
-import { Button, Form, Input } from 'semantic-ui-react'
+import { Button, Form, Input, Transition, Dropdown } from 'semantic-ui-react'
 
 import './form.scss'
 
+const nrGuests = [
+  { key: 1, value: 1, text: 1 },
+  { key: 2, value: 2, text: 2 },
+  { key: 3, value: 3, text: 3 },
+  { key: 4, value: 4, text: 4 },
+]
+
 class FormInvite extends Component {
   state = {
-    guests: '1'
+    guests: '1',
+    visible: true,
   }
+
+  toggleVisibility = () => {
+    this.setState({visible: false })
+  } 
 
   handleChange = (name, e) => {    
     const change = {}
-    change[name] = e.target.value
+    let inputValue = e.target.value
+    if (name === 'voornaam' || 'naam') {
+      inputValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
+    }
+    change[name] = inputValue
     this.setState({ ...change })
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const tasker = this.state
+    const { naam, voornaam, email, guests } = this.state
+    const tasker = {
+      naam,
+      voornaam,
+      email,
+      guests
+    }
+    this.validateForm(tasker)
+  }
+
+  validateForm = (tasker) => {
+    let change = {}
+    let ready = true
+    for (const key in tasker) {
+      let value = tasker[key]
+      if (value === undefined || value === '' || value === 'error') {
+        change[key] = 'error'
+        ready = false
+        this.setState({ ...change })
+      }
+    }
+    if (ready) {
     this.props.onFormSubmit(tasker)
+    this.toggleVisibility()
+    }
+  }
+
+  clearError = (property) => {
+    const change = {}
+    change[property] = ''
+    this.setState({ ...change })
   }
 
   render() {
+    const { visible, voornaam, naam, email, guests } = this.state
     return(
-      <div className="ui container form-container">
-        <div className="form-wrapper">
-          <h2 className="ui header form-title">Inschrijven*</h2>
-          <Form>
-            <Form.Group>
-              <Form.Field required width={6} control={Input} placeholder='Voornaam' onChange={ e => this.handleChange('voornaam', e) }/>
-              <Form.Field required width={6} control={Input} placeholder='Naam' onChange={e => this.handleChange('naam', e)} />
-              <Form.Field required width={8} control={Input} placeholder='Email' onChange={e => this.handleChange('email', e)}/>
-                <select className="ui dropdown" onChange={e => this.setState({ guests: e.target.value})}>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                </select>
+      <Transition visible={visible} animation='horizontal flip' duration={1500}>
+        <div className="ui container form-container">
+          <div className="form-wrapper">
+            <h2 className="ui header form-title">Inschrijven*</h2>
+            <Form>
+              <Form.Group>
+                <Form.Field width={6} control={Input} placeholder='Voornaam' error={voornaam === 'error'} onChange={e => this.handleChange('voornaam', e)} onFocus={e => this.clearError('voornaam')} />
+                <Form.Field width={6} control={Input} placeholder='Naam' error={naam === 'error'} onChange={e => this.handleChange('naam', e)} onFocus={e => this.clearError('naam')} />
+                <Form.Field width={8} control={Input} placeholder='Email' error={email === 'error'} onChange={e => this.handleChange('email', e)} onFocus={e => this.clearError('email')} />
+                <Dropdown placeholder='1' error={guests === 'error'} style={{minWidth: '10px'}} selection options={nrGuests} onChange={e => this.setState({guests: e.target.innerText})}/>
                 <h3 className="form-people">Person/Personen</h3>
-            </Form.Group>
-              <div className="form-footer">
-                <Button positive className="form-btn" onClick={ this.handleSubmit }>Bevestigen</Button>
-                <h5 className="form-footer-note">*Dit event is helemaal gratis</h5>
-              </div>
-          </Form>
+              </Form.Group>
+                <div className="form-footer">
+                <Button positive className="form-btn" onClick={e => { this.handleSubmit(e);}} >Bevestigen</Button>
+                  <h5 className="form-footer-note">*Dit event is helemaal gratis</h5>
+                </div>
+            </Form>
+          </div>
         </div>
-      </div>
+      </Transition>
     )
   }
 }

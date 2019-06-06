@@ -1,7 +1,9 @@
 .form-container {
-  height: 30vh;
+  min-height: 30vh;
   display: flex !important;
   align-items: center;
+  margin-top: 40px;
+  margin-bottom: -20px;
 
   .form-wrapper {
     width: 76%;
@@ -24,6 +26,7 @@
     .form-people {
       margin-top: 3px;
       padding: 6px;
+      margin-left: 5px;
     }
 
     .form-footer {
