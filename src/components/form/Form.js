@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Button, Form, Input, Transition, Dropdown, Header } from 'semantic-ui-react'
 
 import './form.scss'
+import SuccessMessage from '../message'
 
 const nrGuests = [
   { key: 1, value: 1, text: 1 },
@@ -13,11 +14,15 @@ const nrGuests = [
 class FormInvite extends Component {
   state = {
     guests: '1',
-    visible: true,
+    FormVisible: true,
+    MessageVisible: false
   }
 
   toggleVisibility = () => {
-    this.setState({visible: false })
+    this.setState({ 
+      FormVisible: false,
+      MessageVisible: true
+    })
   } 
 
   handleChange = (name, e) => {    
@@ -44,7 +49,7 @@ class FormInvite extends Component {
     let change = {}
     let ready = true
 
-    // Check if all fields have an input
+    // 1. Check if all fields have an input
     for (const key in tasker) {
       let value = tasker[key]
       if (value === undefined || value === '' || value === 'error') {
@@ -54,7 +59,7 @@ class FormInvite extends Component {
       }
     }
 
-    // Regex email
+    // 2. Regex email
     if (tasker.email) {
       if (this.verifyEmail(tasker.email) === false ) {
         this.setState({ email: 'error'})
@@ -62,7 +67,7 @@ class FormInvite extends Component {
       }
     }
 
-    // Submit form
+    // 3. Submit form
     if (ready) {
     this.props.onFormSubmit(tasker)
     this.toggleVisibility()
@@ -82,31 +87,34 @@ class FormInvite extends Component {
   }
 
   render() {
-    const { visible, voornaam, naam, email, guests } = this.state
+    const {  FormVisible, MessageVisible, voornaam, naam, email, guests } = this.state
     return(
-      <Transition visible={visible} animation='horizontal flip' duration={1500}>
-        <div className="ui container form-container">
-          <div className="form-wrapper">
-            <h2 className="ui header form-title">Inschrijven*</h2>
-            <Form>
-              <Form.Group>
-                <Form.Field width={6} control={Input} placeholder='Voornaam' error={voornaam === 'error'} onChange={e => this.handleChange('voornaam', e)} onFocus={e => this.clearError('voornaam')} />
-                <Form.Field width={6} control={Input} placeholder='Naam' error={naam === 'error'} onChange={e => this.handleChange('naam', e)} onFocus={e => this.clearError('naam')} />
-                <div width={8} className="form-email">
-                  <Form.Field control={Input} placeholder='Email' error={email === 'error'} onChange={e => this.handleChange('email', e)} onFocus={e => this.clearError('email')} />
-                  {email === 'error' && <Header as='h6' color='red' className="form-email-msg">Invalid Email format</Header>}
-                </div>
-                <Dropdown placeholder='1' className="form-dropdown" error={guests === 'error'} selection options={nrGuests} onChange={e => this.setState({guests: e.target.innerText})}/>
-                <h3 className="form-people">Person/Personen</h3>
-              </Form.Group>
-                <div className="form-footer">
-                <Button positive className="form-btn" onClick={e => { this.handleSubmit(e);}} >Bevestigen</Button>
-                  <h5 className="form-footer-note">*Dit event is helemaal gratis</h5>
-                </div>
-            </Form>
+      <>
+        <Transition  visible={ FormVisible} animation='horizontal flip' duration={1500}>
+          <div className="ui container form-container">
+            <div className="form-wrapper">
+              <h2 className="ui header form-title">Inschrijven*</h2>
+              <Form>
+                <Form.Group>
+                  <Form.Field width={6} control={Input} placeholder='Voornaam' error={voornaam === 'error'} onChange={e => this.handleChange('voornaam', e)} onFocus={e => this.clearError('voornaam')} />
+                  <Form.Field width={6} control={Input} placeholder='Naam' error={naam === 'error'} onChange={e => this.handleChange('naam', e)} onFocus={e => this.clearError('naam')} />
+                  <div width={8} className="form-email">
+                    <Form.Field control={Input} placeholder='Email' error={email === 'error'} onChange={e => this.handleChange('email', e)} onFocus={e => this.clearError('email')} />
+                    {email === 'error' && <Header as='h6' color='red' className="form-email-msg">Invalid Email format</Header>}
+                  </div>
+                  <Dropdown placeholder='1' className="form-dropdown" error={guests === 'error'} selection options={nrGuests} onChange={e => this.setState({guests: e.target.innerText})}/>
+                  <h3 className="form-people">Person/Personen</h3>
+                </Form.Group>
+                  <div className="form-footer">
+                  <Button positive className="form-btn" onClick={e => { this.handleSubmit(e);}} >Bevestigen</Button>
+                    <h5 className="form-footer-note">*Dit event is helemaal gratis</h5>
+                  </div>
+              </Form>
+            </div>
           </div>
-        </div>
-      </Transition>
+        </Transition>
+        <SuccessMessage MessageVisible={MessageVisible} />
+      </>
     )
   }
 }
