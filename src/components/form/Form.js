@@ -28,7 +28,7 @@ class FormInvite extends Component {
   handleChange = (name, e) => {    
     const change = {}
     let inputValue = e.target.value
-    if (name === 'voornaam' || 'naam') inputValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
+    if (name === 'voornaam' || name === 'naam') inputValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
     change[name] = inputValue
     this.setState({ ...change })
   }

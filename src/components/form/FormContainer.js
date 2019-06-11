@@ -17,8 +17,7 @@ class FormContainer extends Component {
 
   finishInvitation = (tasker) => {
     this.saveInDatabase(tasker)
-    // this.sendEmail(tasker)
-    console.log('saved');
+    this.sendEmail(tasker)
     this.setState({ formSubmitted: true })
   }
 
@@ -28,9 +27,10 @@ class FormContainer extends Component {
 
   sendEmail = (tasker) => {
     const template_params = {
-      name: `${tasker.voornaam} ${tasker.voornaam}`,
+      name: `${tasker.voornaam} ${tasker.naam}`,
       guests: `${tasker.guests}`,
-      email: `${tasker.email}` 
+      email: `${tasker.email}`,
+      image: `<div><img src='https://firebasestorage.googleapis.com/v0/b/kik-invitations.appspot.com/o/logo_bottom.png?alt=media&token=1d4f608f-5b05-41da-a4ad-986391478da6' alt='KlaarisKees' style='width:300px'/></div>` 
     };
 
     emailjs.send(service_id, template_id, template_params, user_id)
